@@ -8,6 +8,7 @@ var app = express();
 
 //Importaciones de Rutas
 var appRoutes = require('./rutas/app');
+var rubroRoutes = require('./rutas/rubro');
 var usuarioRoutes = require('./rutas/usuario');
 
 mongoose.connection.openUri('mongodb://localhost:27017/pedidosDB', (err, res)=>{
@@ -22,8 +23,9 @@ mongoose.connection.openUri('mongodb://localhost:27017/pedidosDB', (err, res)=>{
 app.use(bodyParser.urlencoded({ extended:true }));
 app.use(bodyParser.json());
 //Rutas
-app.use('/usuario', usuarioRoutes);
-app.use('/', appRoutes);
+app.use( '/usuario', usuarioRoutes );
+app.use( '/rubro', rubroRoutes );
+app.use( '/', appRoutes );
 
 
 

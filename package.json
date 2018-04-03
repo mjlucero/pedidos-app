@@ -10,9 +10,14 @@
   "author": "Mauricio Lucero",
   "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.2",
     "express": "^4.16.3",
-    "mongoose": "^5.0.12"
+    "jsonwebtoken": "^8.2.0",
+    "mongoose": "^5.0.12",
+    "mongoose-double": "0.0.1",
+    "mongoose-long": "^0.2.0",
+    "mongoose-unique-validator": "^2.0.0"
   },
   "devDependencies": {
     "nodemon": "^1.17.2"
