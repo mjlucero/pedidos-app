@@ -3,14 +3,14 @@ var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 
 var app = express();
+
 var Usuario = require('../modelo/usuario');
 
-const SEED = require('../config/config').SEED;
 
-app.post('/', (req,res)=>{
+app.post('/login', (req,res)=>{
     var body = req.body;
 
-    Usuario.findOne( {email:body.email}, ( err,usuario )=>{
+    Usuario.findOne( { email:body.email }, ( err,usuario )=>{
         if (err) {
             return res.status(500).json({
                 ok:false,
@@ -31,21 +31,19 @@ app.post('/', (req,res)=>{
             return res.status(400).json({
                 ok:false,
                 mensaje: 'Credenciales incorrectas',
-                errores: { message: 'Passoword incorrecto' }
+                errores: { message: 'Password incorrecto' }
             });
         }
 
-        usuario.password = 'Aqui estaria el password';
 
         //Crear token
-        var token = jwt.sign( { usuario: usuario }, SEED , { expiresIn: 43200 } );
+        var token = jwt.sign( { usuario }, process.env.SEED = process.env.SEED , { expiresIn: process.env.EXP_TOKEN } );
 
 
         res.status(200).json({
             ok:true,
             usuario,
-            token,
-            id: usuario.id
+            token
         });
     });
 })

@@ -1,22 +1,25 @@
-var express = require('express');
-var moment = require('moment');
-var bcrypt = require('bcryptjs');
+const express = require('express');
+const moment = require('moment');
+const bcrypt = require('bcryptjs');
 
-var app = express();
-var Usuario = require('../modelo/usuario');
+const app = express();
+const Usuario = require('../modelo/usuario');
 
-var mdAuth = require('../middlewares/auth');
+let  { verifyToken, verifyRole } = require('../middlewares/auth');
 
 //Obtener los usuarios
-app.get('/', (req,res,next) => {
+app.get('/usuarios', verifyToken ,(req,res,next) => {
 
-    var desde = req.query.desde || 0;
+    let desde = req.query.desde || 0;
     desde = Number(desde);
 
-    if (!isNaN(desde)) {
+    let limite = req.query.limite || 5;
+    limite = Number(limite)
+
+    if ( !isNaN(desde) && !isNaN(limite) ) {
         Usuario.find({}, 'nombre email role fechaAlta fechaBaja')
            .skip(desde)
-           .limit(10)
+           .limit(limite)
            .exec(
                 ( err,usuarios )=>{
                     if (err) {
@@ -55,7 +58,7 @@ app.get('/', (req,res,next) => {
 });
 
 //Crear usuario
-app.post('/', mdAuth.verifyToken, (req, res, next)=>{
+app.post('/usuario', (req, res, next)=>{
     var usuario = new Usuario();
 
     Object.keys(req.body).forEach(key => {
@@ -82,15 +85,15 @@ app.post('/', mdAuth.verifyToken, (req, res, next)=>{
 });
 
 //Actualizar usuario
-app.put('/:id', ( req,res )=>{
+app.put('/usuario/:id', [ verifyToken, verifyRole] ,( req,res )=>{
     var id = req.params.id;
     var body = req.body;
 
-    Usuario.findById(id,( err,usuario )=>{
+    Usuario.findById( id,( err,usuario )=>{
         if (err) {
             return res.status(500).json({
                 ok:false,
-                mensaje: 'Eror al buscar el usuario',
+                mensaje: 'Error al buscar el usuario',
                 errores: err
             });
         }
@@ -116,8 +119,6 @@ app.put('/:id', ( req,res )=>{
                     errors: err
                });
             }
-
-            usuarioStored.password = 'Aqui estaria el password';
 
             res.status(200).json({
                 ok: true,

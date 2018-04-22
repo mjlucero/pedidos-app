@@ -6,10 +6,18 @@ var Schema = mongoose.Schema;
 var rubroSchema = new Schema({
     codigo: { type: String, unique: true ,required: [true, 'El código es requerido']},
     denominacion: { type: String, required: [true, 'La denominación es requerida']},
-    subRubro:[{ type: mongoose.Schema.Types.ObjectId, ref : 'Rubro' }],
+    padre:{ type: mongoose.Schema.Types.ObjectId, ref : 'Rubro' },
     fechaAlta: { type: String },
     fechaBaja: { type: String, default: null}
 },{ collection: 'rubros' } );
+
+let autoPopulatePadre = function(next){
+    this.populate('padre');
+    next();
+}
+
+rubroSchema.pre('find', autoPopulatePadre )
+           .pre('findOne', autoPopulatePadre);
 
 rubroSchema.plugin( uniqueValidator,{ message: '{PATH} debe de ser unico'} );
 
