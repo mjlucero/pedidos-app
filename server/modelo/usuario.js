@@ -13,6 +13,7 @@ let usuarioSchema = new Schema({
     email: { type: String, unique: true, required:[true, 'El correo es necesario']},
     password: { type: String, required:[true,'EL password es necesario']},
     role: { type: String, default: 'USER_ROLE', enum: rolesValidos },
+    cliente : { type: mongoose.Schema.Types.ObjectId, ref : 'Cliente'},
     fechaAlta: { type: String },
     fechaBaja: { type: String, default: null }
 },{ collection: 'usuarios' } );

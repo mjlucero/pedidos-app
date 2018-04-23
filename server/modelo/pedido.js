@@ -14,6 +14,7 @@ var estadosValidos = {
 
 var pedidoSchema = new Schema({
     detalles: [ { type: mongoose.Schema.Types.ObjectId, ref : 'PedidoDetalle', unique: true, required:[true,'El detalle es necesario'] }],
+    cliente: [ { type: mongoose.Schema.Types.ObjectId, ref : 'Cliente', unique: true, required:[true,'El cliente es necesario'] }],
     fechaEntregaEstimada: { type: String, required:[true, 'La fecha de entrega estimada es necesaria'] },
     domicilio: { type: mongoose.Schema.Types.ObjectId, ref : 'Domicilio', required:[true,'El domicilio es necesario'] },
     gastoEnvio: { type: SchemaTypes.Double, required:[true, 'El gasto de envio es necesario'] },

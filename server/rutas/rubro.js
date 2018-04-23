@@ -49,8 +49,8 @@ app.get('/rubros',verifyToken, (req,res,next) => {
     }else{
         res.status(403).json({
             ok:false,
-            mensaje: 'El parametro desde no es valido',
-            errores: { message: 'El parametro desde debe ser un numero valido'}
+            mensaje: 'El parametro desde o limite no es valido',
+            errores: { message: 'El parametro desde debe o limite ser un numero valido'}
         });
     }
 });
@@ -107,6 +107,7 @@ app.post('/rubro', [ verifyToken, verifyRole ], (req, res, next)=>{
 
         res.status(201).json({
             ok: true,
+            mensaje: 'Rubro creado exitosamente',
             rubro: rubroStored 
         });
     });
@@ -114,20 +115,21 @@ app.post('/rubro', [ verifyToken, verifyRole ], (req, res, next)=>{
 
 //Actualizar rubro
 app.put('/rubro/:id',[ verifyToken, verifyRole ], ( req,res )=>{
-    var id = req.params.id;
-    var body = req.body;
+    let id = req.params.id;
+    let body = req.body;
 
     Rubro.findByIdAndUpdate( id ,body ,{ new: true, runValidators: true }, ( err, rubroEdited )=>{
         if (err) {
             return res.status(500).json({
                 ok:false,
-                mensaje: 'Eror al intentar actualizar el rubro',
+                mensaje: 'Error al intentar actualizar el rubro',
                 errores: err
             });
         }
 
         res.json({
             ok:true,
+            mensaje: 'Rubro actualizado exitosamente',
             rubro: rubroEdited
         });
     });
