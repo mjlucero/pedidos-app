@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server/server"
+    "start": "node server/server" ,
+    "dev": "nodemon server/server"
   },
   "author": "Mauricio Lucero",
   "license": "MIT",
