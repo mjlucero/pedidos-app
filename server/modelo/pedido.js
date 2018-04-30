@@ -17,9 +17,10 @@ var pedidoSchema = new Schema({
         _id: false, 
         articulo: { type: mongoose.Schema.Types.ObjectId, ref : 'Articulo', unique: true, required:[true,'El articulo es necesario'] },
         cantidad: { type: Number, required:[true,'La cantidad es necesaria'] },
-        descuento: { type: SchemaTypes.Double, required:[true, 'El descuento es necesario'] }
+        descuento: { type: Number, required:[true, 'El descuento es necesario'] },
+        subtotal: { type: Number, required:[true, 'El subtotal es necesario'] },
     }],
-    cliente: [ { type: mongoose.Schema.Types.ObjectId, ref : 'Cliente', unique: true, required:[true,'El cliente es necesario'] }],
+    cliente: { type: mongoose.Schema.Types.ObjectId, ref : 'Cliente', unique: true, required:[true,'El cliente es necesario'] },
     fechaEntregaEstimada: { type: String, required:[true, 'La fecha de entrega estimada es necesaria'] },
     domicilio: { type: mongoose.Schema.Types.ObjectId, ref : 'Domicilio', required:[true,'El domicilio es necesario'] },
     gastoEnvio: { type: Number, required:[true, 'El gasto de envio es necesario'] },
@@ -27,10 +28,19 @@ var pedidoSchema = new Schema({
     entregado: { type: Boolean, required:true, default: false },
     fechaPedido: { type: String, required:[true, 'La fecha de pedido es necesaria'] },
     numero: { type: Number, unique: true, required:[true,'El numero de pedido es necesario'] },
-    subtotal: { type: Number, required:[true, 'El subtotal es necesario'] },
     total: { type: Number, required:[true, 'El total es necesario'] },
 },{ collection: 'pedidos' } );
 
-pedidoDetalleSchema.plugin( uniqueValidator,{ message:'{PATH} debe ser unico'} );
 
-module.exports = mongoose.model('PedidoDetalle', pedidoDetalleSchema);
+let populateAll = function(next){
+    this.populate('detalles.articulo', '_id denominacion rubro')
+        .populate('cliente', '_id razonSocial');
+    next();
+}
+
+pedidoSchema.pre('find', populateAll )
+                .pre('findOne', populateAll);
+
+pedidoSchema.plugin( uniqueValidator,{ message:'{PATH} debe ser unico'} );
+
+module.exports = mongoose.model('Pedido', pedidoSchema);

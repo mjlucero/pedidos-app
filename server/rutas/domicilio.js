@@ -28,12 +28,14 @@ app.get('/domicilios', ( req,res )=>{
                     }
 
                     Domicilio.count({}, ( err,conteo )=>{
-                        return res.status(500).json({
-                            ok:false,
-                            mensaje: 'Error contando los domicilios',
-                            errores: err
-                        });
-
+                        if ( err ) {
+                            return res.status(500).json({
+                                ok:false,
+                                mensaje: 'Error contando los domicilios',
+                                errores: err
+                            });
+                        }
+                        
                         res.json({
                             ok:true,
                             total: conteo,
