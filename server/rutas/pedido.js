@@ -60,7 +60,7 @@ app.get('/pedidos', verifyToken, ( req,res )=>{
 });
 
 //Obtener pedido por id
-app.get('/pedido/:id', ( req,res )=>{
+app.get('/pedido/:id', verifyToken, ( req,res )=>{
     let id = req.params.id;
 
     Pedido.findById( id, ( err,pedido )=>{
@@ -291,7 +291,5 @@ app.put('/pedido/:id', verifyToken, ( req,res )=>{
         });
     });
 });
-
-
 
 module.exports = app;

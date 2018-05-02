@@ -59,7 +59,7 @@ app.get('/clientes', verifyToken, ( req,res )=>{
 });
 
 //Obtener cliente por id
-app.get('/cliente/:id', ( req,res )=>{
+app.get('/cliente/:id', verifyToken, ( req,res )=>{
     let id = req.params.id;
 
     Cliente.findById( id, ( err,cliente )=>{

@@ -8,7 +8,7 @@ const Usuario = require('../modelo/usuario');
 let  { verifyToken, verifyRole } = require('../middlewares/auth');
 
 //Obtener los usuarios
-app.get('/usuarios', verifyToken ,(req,res,next) => {
+app.get('/usuarios', [verifyToken,verifyRole] ,(req,res,next) => {
 
     let desde = req.query.desde || 0;
     desde = Number(desde);

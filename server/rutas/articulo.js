@@ -110,7 +110,7 @@ app.post('/articulo',[ verifyToken, verifyRole ], (req,res)=>{
     });
 });
 
-app.put('/articulo/:id', ( req,res )=>{
+app.put('/articulo/:id',[ verifyToken, verifyRole ], ( req,res )=>{
     let id = req.params.id;
 
     Articulo.findByIdAndUpdate( id, req.body, { new:true, runValidators:true }, ( err,articuloEdited )=>{

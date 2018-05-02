@@ -7,7 +7,7 @@ const app = express();
 
 let Domicilio = require('../modelo/domicilio');
 
-app.get('/domicilios', ( req,res )=>{
+app.get('/domicilios', verifyToken, ( req,res )=>{
     let desde = req.query.desde || 0;
     desde = Number(desde);
 
@@ -54,7 +54,7 @@ app.get('/domicilios', ( req,res )=>{
     }
 });
 
-app.get('/domicilio/:id', ( req,res )=>{
+app.get('/domicilio/:id', verifyToken, ( req,res )=>{
     let id = req.params.id;
 
     Domicilio.findById( id, ( err,domicilio )=>{
@@ -84,7 +84,7 @@ app.get('/domicilio/:id', ( req,res )=>{
 });
 
 
-app.post('/domicilio', ( req,res )=>{
+app.post('/domicilio', verifyToken, ( req,res )=>{
     let domicilio = new Domicilio();
 
     Object.keys( req.body ).forEach( key =>{
@@ -110,7 +110,7 @@ app.post('/domicilio', ( req,res )=>{
     });
 });
 
-app.put('/domicilio/:id', ( req,res )=>{
+app.put('/domicilio/:id', verifyToken, ( req,res )=>{
     let id = req.params.id;
     let body = req.body;
 
