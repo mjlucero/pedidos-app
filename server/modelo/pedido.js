@@ -1,6 +1,4 @@
-var mongoose = require('mongoose')
-require('mongoose-long')(mongoose)
-require('mongoose-double')(mongoose);
+var mongoose = require('mongoose');
 
 var uniqueValidator = require('mongoose-unique-validator');
 
