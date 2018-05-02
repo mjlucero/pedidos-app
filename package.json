@@ -17,8 +17,6 @@
     "jsonwebtoken": "^8.2.0",
     "moment": "^2.22.1",
     "mongoose": "^5.0.12",
-    "mongoose-double": "0.0.1",
-    "mongoose-long": "^0.2.0",
     "mongoose-unique-validator": "^2.0.0"
   },
   "devDependencies": {
