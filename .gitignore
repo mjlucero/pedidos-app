@@ -1,11 +1,12 @@
 node_modules/
 
-!uploads/usuarios/*.png
-!uploads/usuarios/*.jpg
-!uploads/usuarios/*.gif
-!uploads/usuarios/*.jpeg
+uploads/usuarios/*.png
+uploads/usuarios/*.jpg
+uploads/usuarios/*.gif
+uploads/usuarios/*.jpeg
 
-!uploads/articulos/*.png
-!uploads/articulos/*.jpg
-!uploads/articulos/*.gif
-!uploads/articulos/*.jpeg
+uploads/articulos/*.png
+uploads/articulos/*.jpg
+uploads/articulos/*.gif
+uploads/articulos/*.jpeg
+
