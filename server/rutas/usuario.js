@@ -5,10 +5,10 @@ const bcrypt = require('bcryptjs');
 const app = express();
 const Usuario = require('../modelo/usuario');
 
-let  { verifyToken, verifyRole } = require('../middlewares/auth');
+let { verifyToken, verifyRole } = require('../middlewares/auth');
 
 //Obtener los usuarios
-app.get('/usuarios', [verifyToken,verifyRole] ,(req,res,next) => {
+app.get('/usuarios', [verifyToken, verifyRole], (req, res, next) => {
 
     let desde = req.query.desde || 0;
     desde = Number(desde);
@@ -16,12 +16,12 @@ app.get('/usuarios', [verifyToken,verifyRole] ,(req,res,next) => {
     let limite = req.query.limite || 5;
     limite = Number(limite)
 
-    if ( !isNaN(desde) && !isNaN(limite) ) {
+    if (!isNaN(desde) && !isNaN(limite)) {
         Usuario.find({}, 'nombre email role fechaAlta fechaBaja')
-           .skip(desde)
-           .limit(limite)
-           .exec(
-                ( err,usuarios )=>{
+            .skip(desde)
+            .limit(limite)
+            .exec(
+                (err, usuarios) => {
                     if (err) {
                         return res.status(500).json({
                             ok: false,
@@ -30,7 +30,7 @@ app.get('/usuarios', [verifyToken,verifyRole] ,(req,res,next) => {
                         });
                     }
 
-                    Usuario.count({}, (err, conteo)=>{
+                    Usuario.count({}, (err, conteo) => {
                         if (err) {
                             return res.status(500).json({
                                 ok: false,
@@ -42,23 +42,23 @@ app.get('/usuarios', [verifyToken,verifyRole] ,(req,res,next) => {
                         res.status(200).json({
                             ok: true,
                             total: conteo,
-                            usuarios 
+                            usuarios
                         });
                     });
                 });
     } else {
         res.status(403).json({
-            ok:false,
+            ok: false,
             mensaje: 'El parametro desde no es valido',
-            errores: { message: 'El parametro desde debe ser un numero valido'}
+            errores: { message: 'El parametro desde debe ser un numero valido' }
         });
     }
 
-    
+
 });
 
 //Crear usuario
-app.post('/usuario', (req, res, next)=>{
+app.post('/usuario', (req, res, next) => {
     var usuario = new Usuario();
 
     Object.keys(req.body).forEach(key => {
@@ -66,10 +66,10 @@ app.post('/usuario', (req, res, next)=>{
     });
 
     usuario.password = bcrypt.hashSync(usuario.password, 10);
-    usuario.fechaAlta = moment().format('DD-MM-YYYY HH:mm:ss');
+    usuario.fechaAlta = moment().format('DD-MM-YYYY');
 
-    usuario.save(( err,usuarioStored )=>{
-        if ( err ){
+    usuario.save((err, usuarioStored) => {
+        if (err) {
             return res.status(500).json({
                 ok: false,
                 mensaje: 'Error al crear usuario',
@@ -79,20 +79,21 @@ app.post('/usuario', (req, res, next)=>{
 
         res.status(201).json({
             ok: true,
-            usuario: usuarioStored 
+            mensaje: 'Usuario creado correctamente',
+            usuario: usuarioStored
         });
     });
 });
 
 //Actualizar usuario
-app.put('/usuario/:id', [ verifyToken, verifyRole] ,( req,res )=>{
+app.put('/usuario/:id', [verifyToken], (req, res) => {
     var id = req.params.id;
     var body = req.body;
 
-    Usuario.findById( id,( err,usuario )=>{
+    Usuario.findById(id, (err, usuario) => {
         if (err) {
             return res.status(500).json({
-                ok:false,
+                ok: false,
                 mensaje: 'Error al buscar el usuario',
                 errores: err
             });
@@ -100,8 +101,8 @@ app.put('/usuario/:id', [ verifyToken, verifyRole] ,( req,res )=>{
 
         if (!usuario) {
             return res.status(400).json({
-                ok:false,
-                mensaje: 'Usuario con el id '+id+' no existe',
+                ok: false,
+                mensaje: 'Usuario con el id ' + id + ' no existe',
                 errores: { message: 'No existe un usuario con ese id' }
             });
         }
@@ -111,22 +112,23 @@ app.put('/usuario/:id', [ verifyToken, verifyRole] ,( req,res )=>{
         usuario.role = body.role;
         usuario.fechaBaja = body.fechaBaja;
 
-        usuario.save( (err,usuarioStored)=>{
+        usuario.save((err, usuarioStored) => {
             if (err) {
-               return res.status(400).json({
+                return res.status(400).json({
                     ok: false,
                     mensaje: 'Error al actualizar usuario',
                     errors: err
-               });
+                });
             }
 
             res.status(200).json({
                 ok: true,
+                mensaje: 'Usuario actualizado correctamente',
                 usuario: usuarioStored
             });
         });
 
-        
+
     });
 });
 
