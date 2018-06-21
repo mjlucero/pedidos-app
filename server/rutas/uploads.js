@@ -16,13 +16,13 @@ app.use(fileUpload());
 /**
  * Servicio para obtener las imagenes
  */
-app.get('/imagen/:tipo/:img', verifyToken, (req, res) => {
+app.get('/imagen/:tipo/:img', (req, res) => {
     let tipo = req.params.tipo;
     let img = req.params.img;
 
 
     let pathUrl = path.resolve(__dirname, `../../uploads/${ tipo }/${ img }`);
-    console.log(pathUrl);
+
     if (fs.existsSync(pathUrl)) {
         res.sendFile(pathUrl);
     } else {

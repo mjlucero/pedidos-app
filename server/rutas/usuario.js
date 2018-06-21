@@ -17,7 +17,7 @@ app.get('/usuarios', [verifyToken, verifyRole], (req, res, next) => {
     limite = Number(limite)
 
     if (!isNaN(desde) && !isNaN(limite)) {
-        Usuario.find({}, 'nombre email role fechaAlta fechaBaja')
+        Usuario.find({}, 'nombre email role img fechaAlta fechaBaja')
             .skip(desde)
             .limit(limite)
             .exec(

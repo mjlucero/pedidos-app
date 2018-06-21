@@ -22,6 +22,8 @@ app.use(bodyParser.json());
 //Importaciones de Rutas
 app.use(require('./rutas/index'));
 
+app.use(express.static(__dirname + '/dist'));
+
 mongoose.connection.openUri(process.env.URL_DB, (err, res) => {
     if (err) throw err;
 
