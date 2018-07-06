@@ -91,7 +91,7 @@ app.post('/domicilio', verifyToken, (req, res) => {
         domicilio[key] = req.body[key];
     });
 
-    domicilio.fechaAlta = moment().format('DD-MM-YYYY HH:mm:ss');
+    domicilio.fechaAlta = moment().format('DD-MM-YYYY');
 
     domicilio.save((err, domicilioStored) => {
         if (err) {

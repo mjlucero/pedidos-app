@@ -8,20 +8,20 @@ const app = express();
 let Rubro = require('../modelo/rubro');
 
 //Obtener todos los rubros
-app.get('/rubros',verifyToken, (req,res,next) => {
+app.get('/rubros', verifyToken, (req, res, next) => {
 
     let desde = req.query.desde || 0;
     desde = Number(desde);
 
     let limite = req.query.limite || 5;
-    limite = Number(limite)
+    limite = Number(limite);
 
-    if ( !isNaN(desde) && !isNaN(limite) ) {
+    if (!isNaN(desde) && !isNaN(limite)) {
         Rubro.find({})
             .skip(desde)
             .limit(limite)
             .sort('denominacion')
-            .exec( ( err,rubros )=>{
+            .exec((err, rubros) => {
                 if (err) {
                     return res.status(500).json({
                         ok: false,
@@ -30,7 +30,7 @@ app.get('/rubros',verifyToken, (req,res,next) => {
                     });
                 }
 
-                Rubro.count({}, (err, conteo)=>{
+                Rubro.count({}, (err, conteo) => {
                     if (err) {
                         return res.status(500).json({
                             ok: false,
@@ -42,25 +42,25 @@ app.get('/rubros',verifyToken, (req,res,next) => {
                     res.status(200).json({
                         ok: true,
                         total: conteo,
-                        rubros 
+                        rubros
                     });
                 });
-        });
-    }else{
+            });
+    } else {
         res.status(403).json({
-            ok:false,
+            ok: false,
             mensaje: 'El parametro desde o limite no es valido',
-            errores: { message: 'El parametro desde debe o limite ser un numero valido'}
+            errores: { message: 'El parametro desde debe o limite ser un numero valido' }
         });
     }
 });
 
 //Obtener un rubro
-app.get('/rubro/:id',verifyToken, (req,res,next) => {
+app.get('/rubro/:id', verifyToken, (req, res, next) => {
 
     let id = req.params.id;
 
-    Rubro.findById( id, ( err,rubro )=>{
+    Rubro.findById(id, (err, rubro) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
@@ -71,32 +71,32 @@ app.get('/rubro/:id',verifyToken, (req,res,next) => {
 
         if (!rubro) {
             return res.status(400).json({
-                ok:false,
+                ok: false,
                 mensaje: 'No se encontro el rubro con este id',
                 errores: {
-                    message: 'No existe categoria con este ID: '+id
+                    message: 'No existe categoria con este ID: ' + id
                 }
             });
         }
 
         res.json({
             ok: true,
-            rubro 
+            rubro
         });
     });
 });
 
 //Crear rubro
-app.post('/rubro', [ verifyToken, verifyRole ], (req, res, next)=>{
+app.post('/rubro', [verifyToken, verifyRole], (req, res, next) => {
     var rubro = new Rubro();
 
     Object.keys(req.body).forEach(key => {
         rubro[key] = req.body[key];
     });
 
-    rubro.fechaAlta = moment().format('DD-MM-YYYY HH:mm:ss');
+    rubro.fechaAlta = moment().format('DD-MM-YYYY');
 
-    rubro.save(( err,rubroStored )=>{
+    rubro.save((err, rubroStored) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
@@ -108,27 +108,29 @@ app.post('/rubro', [ verifyToken, verifyRole ], (req, res, next)=>{
         res.status(201).json({
             ok: true,
             mensaje: 'Rubro creado exitosamente',
-            rubro: rubroStored 
+            rubro: rubroStored
         });
     });
 });
 
 //Actualizar rubro
-app.put('/rubro/:id',[ verifyToken, verifyRole ], ( req,res )=>{
+app.put('/rubro/:id', [verifyToken, verifyRole], (req, res) => {
     let id = req.params.id;
     let body = req.body;
 
-    Rubro.findByIdAndUpdate( id ,body ,{ new: true, runValidators: true }, ( err, rubroEdited )=>{
+    // console.log(body);
+
+    Rubro.findByIdAndUpdate(id, body, { new: true, runValidators: false }, (err, rubroEdited) => {
         if (err) {
             return res.status(500).json({
-                ok:false,
+                ok: false,
                 mensaje: 'Error al intentar actualizar el rubro',
                 errores: err
             });
         }
 
         res.json({
-            ok:true,
+            ok: true,
             mensaje: 'Rubro actualizado exitosamente',
             rubro: rubroEdited
         });
