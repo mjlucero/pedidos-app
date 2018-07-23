@@ -105,7 +105,8 @@ app.post('/articulo', [verifyToken, verifyRole], (req, res) => {
 
         res.json({
             ok: true,
-            articulo: articuloStored
+            articulo: articuloStored,
+            mensaje: 'Se creo correctamente'
         });
     });
 });
