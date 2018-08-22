@@ -116,7 +116,7 @@ app.put('/articulo/:id', [verifyToken, verifyRole], (req, res) => {
 
     delete req.body._id;
 
-    Articulo.findByIdAndUpdate(id, req.body, { new: true, runValidators: true }, (err, articuloEdited) => {
+    Articulo.findByIdAndUpdate(id, req.body, { new: true }, (err, articuloEdited) => {
         if (err) {
             return res.status(500).json({
                 ok: false,

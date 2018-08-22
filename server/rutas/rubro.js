@@ -117,9 +117,7 @@ app.post('/rubro', [verifyToken, verifyRole], (req, res) => {
 app.put('/rubro/:id', [verifyToken, verifyRole], (req, res) => {
     let id = req.params.id;
 
-    delete req.body._id;
-
-    Rubro.findByIdAndUpdate(id, req.body, { new: true, runValidators: true }, (err, rubroEdited) => {
+    Rubro.findByIdAndUpdate(id, req.body, { new: true }, (err, rubroEdited) => {
         if (err) {
             return res.status(500).json({
                 ok: false,

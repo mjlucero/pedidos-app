@@ -119,9 +119,7 @@ app.post('/cliente', verifyToken, (req, res) => {
 app.put('/cliente/:id', verifyToken, (req, res) => {
     let id = req.params.id;
 
-    delete req.body._id;
-
-    Cliente.findByIdAndUpdate(id, req.body, { new: true, runValidators: true }, (err, clienteEdited) => {
+    Cliente.findByIdAndUpdate(id, req.body, { new: true }, (err, clienteEdited) => {
         if (err) {
             return res.status(500).json({
                 ok: true,
