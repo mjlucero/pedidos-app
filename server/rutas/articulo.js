@@ -128,7 +128,8 @@ app.put('/articulo/:id', [verifyToken, verifyRole], (req, res) => {
 
         res.json({
             ok: true,
-            articulo: articuloEdited
+            articulo: articuloEdited,
+            mensaje: 'Articulo actualizado exitosamente'
         });
     });
 });
