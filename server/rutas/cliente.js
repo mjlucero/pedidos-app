@@ -120,7 +120,6 @@ app.put('/cliente/:id', verifyToken, (req, res) => {
     let id = req.params.id;
 
     delete req.body._id;
-    delete req.body.cuit;
 
     Cliente.findByIdAndUpdate(id, req.body, { new: true, runValidators: true }, (err, clienteEdited) => {
         if (err) {

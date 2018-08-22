@@ -118,7 +118,6 @@ app.put('/rubro/:id', [verifyToken, verifyRole], (req, res) => {
     let id = req.params.id;
 
     delete req.body._id;
-    delete req.body.codigo;
 
     Rubro.findByIdAndUpdate(id, req.body, { new: true, runValidators: true }, (err, rubroEdited) => {
         if (err) {

@@ -115,7 +115,6 @@ app.put('/articulo/:id', [verifyToken, verifyRole], (req, res) => {
     let id = req.params.id;
 
     delete req.body._id;
-    delete req.body.codigo;
 
     Articulo.findByIdAndUpdate(id, req.body, { new: true, runValidators: true }, (err, articuloEdited) => {
         if (err) {
