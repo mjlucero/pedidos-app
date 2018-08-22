@@ -8,7 +8,7 @@ const app = express();
 let Rubro = require('../modelo/rubro');
 
 //Obtener todos los rubros
-app.get('/rubros', verifyToken, (req, res, next) => {
+app.get('/rubros', verifyToken, (req, res) => {
 
     let desde = req.query.desde || 0;
     desde = Number(desde);
@@ -56,7 +56,7 @@ app.get('/rubros', verifyToken, (req, res, next) => {
 });
 
 //Obtener un rubro
-app.get('/rubro/:id', verifyToken, (req, res, next) => {
+app.get('/rubro/:id', verifyToken, (req, res) => {
 
     let id = req.params.id;
 
@@ -87,7 +87,7 @@ app.get('/rubro/:id', verifyToken, (req, res, next) => {
 });
 
 //Crear rubro
-app.post('/rubro', [verifyToken, verifyRole], (req, res, next) => {
+app.post('/rubro', [verifyToken, verifyRole], (req, res) => {
     var rubro = new Rubro();
 
     Object.keys(req.body).forEach(key => {
@@ -117,8 +117,6 @@ app.post('/rubro', [verifyToken, verifyRole], (req, res, next) => {
 app.put('/rubro/:id', [verifyToken, verifyRole], (req, res) => {
     let id = req.params.id;
     let body = req.body;
-
-    // console.log(body);
 
     Rubro.findByIdAndUpdate(id, body, { new: true, runValidators: false }, (err, rubroEdited) => {
         if (err) {
