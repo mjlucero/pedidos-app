@@ -1,7 +1,6 @@
 var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema;
-var SchemaTypes = mongoose.Schema.Types;
 
 var domicilioSchema = new Schema({
     direccion: { type: String, required: [true, 'La direccion es necesaria'] },

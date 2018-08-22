@@ -112,9 +112,10 @@ app.post('/domicilio', verifyToken, (req, res) => {
 
 app.put('/domicilio/:id', verifyToken, (req, res) => {
     let id = req.params.id;
-    let body = req.body;
 
-    Domicilio.findByIdAndUpdate(id, body, { new: true, runValidators: true }, (err, domicilioEdited) => {
+    delete req.body._id;
+
+    Domicilio.findByIdAndUpdate(id, req.body, { new: true, runValidators: true }, (err, domicilioEdited) => {
         if (err) {
             return res.status(500).json({
                 ok: false,

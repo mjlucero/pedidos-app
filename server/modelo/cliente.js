@@ -3,7 +3,6 @@ var mongoose = require('mongoose');
 var uniqueValidator = require('mongoose-unique-validator');
 
 var Schema = mongoose.Schema;
-var SchemaTypes = mongoose.Schema.Types;
 
 var clienteSchema = new Schema({
     razonSocial: { type: String, required: [true, 'La razon social es necesaria'] },

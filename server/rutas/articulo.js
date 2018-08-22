@@ -113,9 +113,11 @@ app.post('/articulo', [verifyToken, verifyRole], (req, res) => {
 
 app.put('/articulo/:id', [verifyToken, verifyRole], (req, res) => {
     let id = req.params.id;
-    let body = req.body;
 
-    Articulo.findByIdAndUpdate(id, body, { new: true, runValidators: true }, (err, articuloEdited) => {
+    delete req.body._id;
+    delete req.body.codigo;
+
+    Articulo.findByIdAndUpdate(id, req.body, { new: true, runValidators: true }, (err, articuloEdited) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
