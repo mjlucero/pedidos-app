@@ -19,6 +19,6 @@ let autoPopulatePadre = function(next) {
 rubroSchema.pre('find', autoPopulatePadre)
     .pre('findOne', autoPopulatePadre);
 
-rubroSchema.plugin(uniqueValidator, { message: '{PATH} debe de ser unico' });
+rubroSchema.plugin(uniqueValidator, { message: 'El {PATH} debe de ser unico' });
 
 module.exports = mongoose.model('Rubro', rubroSchema);

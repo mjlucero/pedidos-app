@@ -100,9 +100,10 @@ app.post('/rubro', [verifyToken, verifyRole], (req, res) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
-                mensaje: 'Error al crear rubro',
-                errores: err
+                mensaje: 'Error al crear el rubro',
+                err
             });
+
         }
 
         res.status(201).json({
@@ -119,11 +120,21 @@ app.put('/rubro/:id', [verifyToken, verifyRole], (req, res) => {
 
     Rubro.findByIdAndUpdate(id, req.body, { new: true }, (err, rubroEdited) => {
         if (err) {
-            return res.status(500).json({
-                ok: false,
-                mensaje: 'Error al intentar actualizar el rubro',
-                errores: err
-            });
+            switch (err.code) {
+                case 11000:
+                    return res.status(500).json({
+                        ok: false,
+                        mensaje: 'No se pudo actualizar el rubro, el codigo ya existe',
+                        err
+                    });
+
+                default:
+                    return res.status(500).json({
+                        ok: false,
+                        mensaje: 'Error al intentar actualizar el rubro',
+                        err
+                    });
+            }
         }
 
         res.json({
