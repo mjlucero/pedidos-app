@@ -4,32 +4,33 @@ var jwt = require('jsonwebtoken');
 
 var app = express();
 
+let { verifyToken } = require('../middlewares/auth');
 var Usuario = require('../modelo/usuario');
 
 
-app.post('/login', (req,res)=>{
+app.post('/login', (req, res) => {
     var body = req.body;
 
-    Usuario.findOne( { email:body.email }, ( err,usuario )=>{
+    Usuario.findOne({ email: body.email }, (err, usuario) => {
         if (err) {
             return res.status(500).json({
-                ok:false,
-                mensaje:'Error al buscar usuario',
+                ok: false,
+                mensaje: 'Error al buscar usuario',
                 errores: err
             });
         }
 
         if (!usuario) {
             return res.status(400).json({
-                ok:false,
+                ok: false,
                 mensaje: 'Credenciales incorrectas',
                 errores: { message: 'Correo incorrecto' }
             });
         }
 
-        if ( !bcrypt.compareSync( body.password, usuario.password) ) {
+        if (!bcrypt.compareSync(body.password, usuario.password)) {
             return res.status(400).json({
-                ok:false,
+                ok: false,
                 mensaje: 'Credenciales incorrectas',
                 errores: { message: 'Password incorrecto' }
             });
@@ -37,16 +38,27 @@ app.post('/login', (req,res)=>{
 
 
         //Crear token
-        var token = jwt.sign( { usuario }, process.env.SEED = process.env.SEED , { expiresIn: process.env.EXP_TOKEN } );
+        var token = jwt.sign({ usuario }, process.env.SEED = process.env.SEED, { expiresIn: process.env.EXP_TOKEN });
 
 
         res.status(200).json({
-            ok:true,
+            ok: true,
+            id: usuario._id,
             usuario,
             token
         });
     });
-})
+});
+
+app.get('/renuevatoken', verifyToken, (req, res) => {
+
+    let token = jwt.sign({ usuario: req.usuario }, process.env.SEED = process.env.SEED, { expiresIn: process.env.EXP_TOKEN });
+
+    res.status(200).json({
+        ok: true,
+        token
+    });
+});
 
 
 module.exports = app;
